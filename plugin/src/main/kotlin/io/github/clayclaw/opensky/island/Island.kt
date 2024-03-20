@@ -10,6 +10,8 @@ sealed class Island(
     var name: String?,
 ) {
 
+    val worldName = "sky-${uuid}"
+
     class Unloaded(
         uuid: UUID,
         party: Party,
