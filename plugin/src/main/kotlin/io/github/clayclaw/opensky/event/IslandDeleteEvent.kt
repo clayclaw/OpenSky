@@ -3,7 +3,10 @@ package io.github.clayclaw.opensky.event
 import io.github.clayclaw.opensky.island.Island
 import org.bukkit.event.HandlerList
 
-class IslandDeleteEvent(island: Island) : IslandEvent(island) {
+/**
+ * This event is fired before an unloaded island is deleted from data source
+ */
+class IslandDeleteEvent(island: Island.Unloaded) : IslandEvent(island) {
 
     companion object {
         private val HANDLER_LIST = HandlerList()

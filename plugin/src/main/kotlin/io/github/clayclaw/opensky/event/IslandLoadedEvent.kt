@@ -1,10 +1,13 @@
 package io.github.clayclaw.opensky.event
 
-import io.github.clayclaw.opensky.island.LocalIsland
+import io.github.clayclaw.opensky.island.Island
 import org.bukkit.event.HandlerList
 
+/**
+ * This event is fired after the island is loaded
+ */
 class IslandLoadedEvent(
-    island: LocalIsland
+    island: Island.Local
 ) : IslandEvent(island) {
 
     companion object {

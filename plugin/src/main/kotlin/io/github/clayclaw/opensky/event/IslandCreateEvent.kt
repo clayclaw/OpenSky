@@ -3,7 +3,10 @@ package io.github.clayclaw.opensky.event
 import io.github.clayclaw.opensky.island.Island
 import org.bukkit.event.HandlerList
 
-class IslandCreateEvent(island: Island) : IslandEvent(island) {
+/**
+ * This event is fired when a new island is created but not loaded into bukkit worlds
+ */
+class IslandCreateEvent(island: Island.Unloaded) : IslandEvent(island) {
 
     companion object {
         private val HANDLER_LIST = HandlerList()
