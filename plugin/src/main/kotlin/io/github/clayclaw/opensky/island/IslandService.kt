@@ -1,5 +1,6 @@
 package io.github.clayclaw.opensky.island
 
+import io.github.clayclaw.opensky.party.Party
 import org.bukkit.World
 import java.util.*
 
@@ -49,13 +50,18 @@ interface IslandService {
     suspend fun getAllIslands(): List<Island>
 
     /**
-     * Create a new island and load it.
+     * Create a new island for the party and load it.
      */
-    suspend fun createNewIsland(): Island.Local
+    suspend fun createNewIsland(party: Party): Island.Local
 
     /**
      * Load the island from the data source.
      */
     suspend fun loadIsland(islandUUID: UUID): Island.Local
+
+    /**
+     * Delete the island from the data source.
+     */
+    suspend fun deleteIsland(islandUUID: UUID)
 
 }
