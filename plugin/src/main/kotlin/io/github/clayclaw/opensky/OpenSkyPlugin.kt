@@ -1,6 +1,6 @@
 package io.github.clayclaw.opensky
 
-import io.github.clayclaw.opensky.cache.CacheService
+import io.github.clayclaw.opensky.cache.RedisCacheService
 import io.github.clayclaw.opensky.command.OpenSkyBukkitCommand
 import io.github.clayclaw.opensky.config.configModule
 import io.github.clayclaw.opensky.database.DatabaseService
@@ -22,6 +22,7 @@ class OpenSkyPlugin: JavaPlugin() {
 
     override fun onEnable() {
         val systemModule = module {
+            single { this@OpenSkyPlugin }
             single { this@OpenSkyPlugin.logger }
         }
         koinApplication = startKoin {
@@ -53,7 +54,7 @@ class OpenSkyPlugin: JavaPlugin() {
 class OpenSkyModuleBootstrap: KoinComponent {
 
     private val databaseService: DatabaseService by inject()
-    private val cacheService: CacheService by inject()
+    private val cacheService: RedisCacheService by inject()
 
     fun init() {
         databaseService.connect()
