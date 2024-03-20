@@ -20,6 +20,12 @@ repositories {
     maven {
         url = uri("https://oss.sonatype.org/content/repositories/central")
     }
+    maven {
+        url = uri("https://repo.infernalsuite.com/repository/maven-snapshots/")
+    }
+    maven {
+        url = uri("https://repo.rapture.pw/repository/maven-releases/")
+    }
 }
 
 val kotlinVersion: String by project
@@ -65,10 +71,12 @@ spigot {
         }
     }
     libraries = runtimeDependencies + mavenDependencies
+    depends("SlimeWorldManager")
 }
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:${spigotVersion}")
+    compileOnly("com.infernalsuite.aswm:api:1.20.4-R0.1-20240218.183756-10")
 
     mavenDependencies.forEach(::compileOnly)
 
