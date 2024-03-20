@@ -1,19 +1,19 @@
 package io.github.clayclaw.opensky.island.loader
 
 import io.github.clayclaw.opensky.island.Island
-import org.bukkit.World
+import java.io.File
 
 interface IslandLoader {
 
     /**
      * Import a world as a template for island first time creation.
      */
-    suspend fun importWorldTemplate(world: World): Island.Unloaded
+    suspend fun importWorldTemplate(worldFolder: File)
 
     /**
      * Load island from data source.
      */
-    suspend fun loadIsland(islandId: Island.Unloaded): Island.Local
+    suspend fun loadIsland(island: Island.Unloaded): Island.Local
 
     /**
      * Save island to data source.
@@ -23,7 +23,7 @@ interface IslandLoader {
     /**
      * Unload island from bukkit.
      */
-    suspend fun unloadIsland(island: Island.Local)
+    suspend fun unloadIsland(island: Island.Local): Island.Unloaded
 
     /**
      * Delete island from data source.
