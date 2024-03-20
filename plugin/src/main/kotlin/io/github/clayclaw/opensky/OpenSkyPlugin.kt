@@ -3,7 +3,7 @@ package io.github.clayclaw.opensky
 import io.github.clayclaw.opensky.cache.RedisCacheService
 import io.github.clayclaw.opensky.command.OpenSkyBukkitCommand
 import io.github.clayclaw.opensky.config.configModule
-import io.github.clayclaw.opensky.database.DatabaseService
+import io.github.clayclaw.opensky.database.ExposedDatabaseService
 import org.bukkit.plugin.java.JavaPlugin
 import org.koin.core.KoinApplication
 import org.koin.core.component.KoinComponent
@@ -53,16 +53,16 @@ class OpenSkyPlugin: JavaPlugin() {
 
 class OpenSkyModuleBootstrap: KoinComponent {
 
-    private val databaseService: DatabaseService by inject()
+    private val exposedDatabaseService: ExposedDatabaseService by inject()
     private val cacheService: RedisCacheService by inject()
 
     fun init() {
-        databaseService.connect()
+        exposedDatabaseService.connect()
         cacheService.connect()
     }
 
     fun close() {
-        databaseService.disconnect()
+        exposedDatabaseService.disconnect()
         cacheService.disconnect()
     }
 

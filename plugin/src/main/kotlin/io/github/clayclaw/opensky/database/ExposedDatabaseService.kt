@@ -10,7 +10,7 @@ import org.koin.core.annotation.Single
 import java.util.logging.Logger
 
 @Single
-class DatabaseService(
+class ExposedDatabaseService(
     private val config: ConfigDatabase,
     private val logger: Logger,
 ) {
