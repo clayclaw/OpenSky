@@ -1,4 +1,4 @@
-package io.github.clayclaw.opensky.models
+package io.github.clayclaw.opensky.models.facade
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
