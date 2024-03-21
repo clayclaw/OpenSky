@@ -12,11 +12,11 @@ import java.util.logging.Logger
 class RedisCacheService(
     private val logger: Logger,
     private val configCache: ConfigCache,
-) {
+): CacheService {
 
     private lateinit var client: KredsClient
 
-    fun connect() {
+    override fun connect() {
         runBlocking {
             client = newClient(Endpoint.from(configCache.endpoint))
             if(!configCache.password.isNullOrEmpty()) {
@@ -42,7 +42,7 @@ class RedisCacheService(
         logger.info("Redis client is connected to ${configCache.endpoint}")
     }
 
-    fun disconnect() {
+    override fun disconnect() {
         if(::client.isInitialized) {
             client.close()
             logger.info("Redis client is disconnected.")

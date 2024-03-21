@@ -13,11 +13,11 @@ import java.util.logging.Logger
 class ExposedDatabaseService(
     private val config: ConfigDatabase,
     private val logger: Logger,
-) {
+): DatabaseService {
 
     private lateinit var database: Database
 
-    fun connect() {
+    override fun connect() {
         runCatching {
             database = Database.connect({
                 val config = HikariConfig().apply {
@@ -44,7 +44,7 @@ class ExposedDatabaseService(
         }
     }
 
-    fun disconnect() {
+    override fun disconnect() {
         if(::database.isInitialized) {
             TransactionManager.closeAndUnregister(database)
         } else {
