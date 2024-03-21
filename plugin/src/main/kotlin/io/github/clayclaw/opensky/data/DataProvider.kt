@@ -1,10 +1,10 @@
-package io.github.clayclaw.opensky.models.facade
+package io.github.clayclaw.opensky.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 
-interface ModelFacade<T, KeyT> {
+interface DataProvider<T, KeyT> {
 
     suspend fun read(key: KeyT): T?
     suspend fun upsert(key: KeyT, value: T)
@@ -14,11 +14,11 @@ interface ModelFacade<T, KeyT> {
 
 }
 
-suspend fun <T, KeyT> ModelFacade<T, KeyT>.readOrThrow(key: KeyT): T {
+suspend fun <T, KeyT> DataProvider<T, KeyT>.readOrThrow(key: KeyT): T {
     return read(key) ?: throw NoSuchElementException("No such element with key $key")
 }
 
-suspend fun <T, KeyT> ModelFacade<T, KeyT>.readOrInsert(key: KeyT, defaultValue: () -> T) = coroutineScope {
+suspend fun <T, KeyT> DataProvider<T, KeyT>.readOrInsert(key: KeyT, defaultValue: () -> T) = coroutineScope {
     read(key) ?: async(Dispatchers.IO) {
         val value = defaultValue()
         upsert(key, value)

@@ -1,4 +1,4 @@
-package io.github.clayclaw.opensky.models
+package io.github.clayclaw.opensky.data.exposed
 
 import io.github.clayclaw.opensky.extension.currentUTC
 import org.jetbrains.exposed.dao.*
