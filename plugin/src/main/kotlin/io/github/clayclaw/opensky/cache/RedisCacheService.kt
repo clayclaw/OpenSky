@@ -14,7 +14,7 @@ class RedisCacheService(
     private val configCache: ConfigCache,
 ): CacheService {
 
-    private lateinit var client: KredsClient
+    internal lateinit var client: KredsClient
 
     override fun connect() {
         runBlocking {
