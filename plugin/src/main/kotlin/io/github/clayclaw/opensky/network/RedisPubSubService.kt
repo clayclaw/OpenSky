@@ -32,6 +32,7 @@ class RedisPubSubService(
     override fun init() {
         runBlocking {
             subscriberClient = newSubscriberClient(Endpoint.from(configCache.endpoint), this@RedisPubSubService)
+            testPubSubChannel()
         }
     }
 
@@ -41,6 +42,15 @@ class RedisPubSubService(
             subscriberClient.close()
         }
         subscriptions.clear()
+    }
+
+    private suspend fun testPubSubChannel() {
+        var subscription: PubSubSubscription? = null
+        subscription = subscribe<TestMessage> {
+            logger.info("Received test message: $it")
+            subscription!!.cancel()
+        }
+        publish(TestMessage())
     }
 
     override suspend fun <T : Any> publish(channel: PubSubChannel, message: T) {
@@ -111,4 +121,5 @@ class RedisPubSubService(
         ex.printStackTrace()
     }
 
+    data class TestMessage(val message: String = "hello-redis pubsub!")
 }
