@@ -55,6 +55,7 @@ val mavenDependencies = listOf(
     "org.yaml:snakeyaml:$snakeYamlVersion",
     "io.github.crackthecodeabhi:kreds:$kredsVersion",
     "com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:$mccourtineVersion",
+    "com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:$mccourtineVersion",
 )
 
 val runtimeDependencies = listOf(

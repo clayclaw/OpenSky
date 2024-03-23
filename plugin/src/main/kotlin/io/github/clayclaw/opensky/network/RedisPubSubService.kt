@@ -6,10 +6,7 @@ import io.github.clayclaw.opensky.OpenSkyPlugin
 import io.github.clayclaw.opensky.cache.RedisCacheService
 import io.github.clayclaw.opensky.config.ConfigCache
 import io.github.clayclaw.opensky.extension.debug
-import io.github.crackthecodeabhi.kreds.connection.AbstractKredsSubscriber
-import io.github.crackthecodeabhi.kreds.connection.Endpoint
-import io.github.crackthecodeabhi.kreds.connection.KredsSubscriberClient
-import io.github.crackthecodeabhi.kreds.connection.newSubscriberClient
+import io.github.crackthecodeabhi.kreds.connection.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -30,8 +27,11 @@ class RedisPubSubService(
     private val subscriptions = HashMap<PubSubChannel, HashSet<RedisPubSubSubscription>>()
 
     override fun init() {
-        runBlocking {
-            subscriberClient = newSubscriberClient(Endpoint.from(configCache.endpoint), this@RedisPubSubService)
+        plugin.launch {
+            subscriberClient = newSubscriberClient(
+                Endpoint.from(configCache.endpoint),
+                this@RedisPubSubService,
+            )
             testPubSubChannel()
         }
     }
