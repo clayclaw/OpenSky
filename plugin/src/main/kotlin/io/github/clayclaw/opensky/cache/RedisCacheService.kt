@@ -34,9 +34,7 @@ class RedisCacheService(
             }
 
             // test redis connection
-            client.set("opensky:test", "Hello world from OpenSky!")
-            val test = client.get("opensky:test")
-            client.del("opensky:test")
+            val test = client.ping("Hello world from open sky")
             logger.info("Redis test: $test")
         }
         logger.info("Redis client is connected to ${configCache.endpoint}")
