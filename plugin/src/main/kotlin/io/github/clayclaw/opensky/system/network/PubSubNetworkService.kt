@@ -1,4 +1,4 @@
-package io.github.clayclaw.opensky.network
+package io.github.clayclaw.opensky.system.network
 
 import kotlin.reflect.KClass
 

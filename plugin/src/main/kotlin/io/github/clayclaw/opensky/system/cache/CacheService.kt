@@ -1,4 +1,4 @@
-package io.github.clayclaw.opensky.cache
+package io.github.clayclaw.opensky.system.cache
 
 interface CacheService {
 

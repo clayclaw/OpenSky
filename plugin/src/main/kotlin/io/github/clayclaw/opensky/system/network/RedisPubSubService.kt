@@ -1,9 +1,9 @@
-package io.github.clayclaw.opensky.network
+package io.github.clayclaw.opensky.system.network
 
 import com.github.shynixn.mccoroutine.bukkit.launch
 import com.google.gson.Gson
 import io.github.clayclaw.opensky.OpenSkyPlugin
-import io.github.clayclaw.opensky.cache.RedisCacheService
+import io.github.clayclaw.opensky.system.cache.RedisCacheService
 import io.github.clayclaw.opensky.config.ConfigCache
 import io.github.clayclaw.opensky.extension.debug
 import io.github.crackthecodeabhi.kreds.connection.*

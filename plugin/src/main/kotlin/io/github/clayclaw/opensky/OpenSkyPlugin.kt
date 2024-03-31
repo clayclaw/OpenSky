@@ -1,11 +1,11 @@
 package io.github.clayclaw.opensky
 
 import com.google.gson.GsonBuilder
-import io.github.clayclaw.opensky.cache.CacheService
+import io.github.clayclaw.opensky.system.cache.CacheService
 import io.github.clayclaw.opensky.command.OpenSkyBukkitCommand
 import io.github.clayclaw.opensky.config.configModule
-import io.github.clayclaw.opensky.database.DatabaseService
-import io.github.clayclaw.opensky.network.PubSubNetworkService
+import io.github.clayclaw.opensky.system.database.DatabaseService
+import io.github.clayclaw.opensky.system.network.PubSubNetworkService
 import org.bukkit.plugin.java.JavaPlugin
 import org.koin.core.KoinApplication
 import org.koin.core.component.KoinComponent

@@ -1,4 +1,4 @@
-package io.github.clayclaw.opensky.database
+package io.github.clayclaw.opensky.system.database
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource

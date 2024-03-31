@@ -1,4 +1,4 @@
-package io.github.clayclaw.opensky.database
+package io.github.clayclaw.opensky.system.database
 
 interface DatabaseService {
 

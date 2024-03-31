@@ -1,4 +1,4 @@
-package io.github.clayclaw.opensky.cache
+package io.github.clayclaw.opensky.system.cache
 
 import io.github.clayclaw.opensky.config.ConfigCache
 import io.github.crackthecodeabhi.kreds.connection.Endpoint

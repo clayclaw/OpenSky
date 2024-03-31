@@ -1,4 +1,4 @@
-package io.github.clayclaw.opensky.data
+package io.github.clayclaw.opensky.data.provider
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
