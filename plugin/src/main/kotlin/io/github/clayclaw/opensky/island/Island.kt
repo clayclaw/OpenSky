@@ -37,5 +37,10 @@ sealed class Island(
 data class RemoteIslandWorldData(
     val serverId: String,
     val worldName: String,
-    val onlinePlayerIds: Set<UUID>,
+    val onlinePlayerIds: Set<RemoteIslandPlayerData>,
+)
+
+data class RemoteIslandPlayerData(
+    val uuid: UUID,
+    val displayName: String,
 )
