@@ -28,4 +28,10 @@ class ImmutableParty(
     override var name: String?,
     override val leader: UUID,
     override val members: Set<UUID>
-): Party
+): Party {
+
+    companion object {
+        fun from(party: Party) = ImmutableParty(party.uuid, party.name, party.leader, party.members)
+    }
+
+}
