@@ -6,8 +6,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val configModule = module {
-    singleConfig<ConfigDatabase>("database", "plugins/OpenSky/database.yml")
-    singleConfig<ConfigCache>("cache", "plugins/OpenSky/cache.yml")
+    singleConfig<BaseConfig>("config", "plugins/OpenSky/config.yml")
     singleConfig<ConfigMessage>("messages", "plugins/OpenSky/messages.yml")
 }
 

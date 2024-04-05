@@ -1,6 +1,6 @@
 package io.github.clayclaw.opensky.system.cache
 
-import io.github.clayclaw.opensky.config.ConfigCache
+import io.github.clayclaw.opensky.config.BaseConfig
 import io.github.crackthecodeabhi.kreds.connection.Endpoint
 import io.github.crackthecodeabhi.kreds.connection.KredsClient
 import io.github.crackthecodeabhi.kreds.connection.newClient
@@ -11,21 +11,21 @@ import java.util.logging.Logger
 @Single
 class RedisCacheService(
     private val logger: Logger,
-    private val configCache: ConfigCache,
+    private val baseConfig: BaseConfig,
 ): CacheService {
 
     internal lateinit var client: KredsClient
 
     override fun connect() {
         runBlocking {
-            client = newClient(Endpoint.from(configCache.endpoint))
-            if(!configCache.password.isNullOrEmpty()) {
+            client = newClient(Endpoint.from(baseConfig.cache.endpoint))
+            if(!baseConfig.cache.password.isNullOrEmpty()) {
                 var errorMessage: String? = null
 
-                errorMessage = if(configCache.username.isNullOrEmpty()) {
-                    client.auth(configCache.password!!)
+                errorMessage = if(baseConfig.cache.username.isNullOrEmpty()) {
+                    client.auth(baseConfig.cache.password!!)
                 } else {
-                    client.auth(configCache.username!!, configCache.password!!)
+                    client.auth(baseConfig.cache.username!!, baseConfig.cache.password!!)
                 }
 
                 if(errorMessage.isNotEmpty()) {
@@ -37,7 +37,7 @@ class RedisCacheService(
             val test = client.ping("Hello world from open sky")
             logger.info("Redis test: $test")
         }
-        logger.info("Redis client is connected to ${configCache.endpoint}")
+        logger.info("Redis client is connected to ${baseConfig.cache.endpoint}")
     }
 
     override fun disconnect() {

@@ -3,13 +3,12 @@ package io.github.clayclaw.opensky.system.network
 import com.github.shynixn.mccoroutine.bukkit.launch
 import com.google.gson.Gson
 import io.github.clayclaw.opensky.OpenSkyPlugin
-import io.github.clayclaw.opensky.system.cache.RedisCacheService
-import io.github.clayclaw.opensky.config.ConfigCache
+import io.github.clayclaw.opensky.config.BaseConfig
 import io.github.clayclaw.opensky.extension.debug
+import io.github.clayclaw.opensky.system.cache.RedisCacheService
 import io.github.crackthecodeabhi.kreds.connection.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.koin.core.annotation.Single
 import java.util.logging.Logger
 import kotlin.reflect.KClass
@@ -17,7 +16,7 @@ import kotlin.reflect.KClass
 @Single
 class RedisPubSubService(
     private val logger: Logger,
-    private val configCache: ConfigCache,
+    private val baseConfig: BaseConfig,
     private val redisService: Lazy<RedisCacheService>,
     private val gson: Gson,
     private val plugin: OpenSkyPlugin,
@@ -29,7 +28,7 @@ class RedisPubSubService(
     override fun init() {
         plugin.launch {
             subscriberClient = newSubscriberClient(
-                Endpoint.from(configCache.endpoint),
+                Endpoint.from(baseConfig.cache.endpoint),
                 this@RedisPubSubService,
             )
             testPubSubChannel()

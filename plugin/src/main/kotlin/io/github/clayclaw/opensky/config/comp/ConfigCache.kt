@@ -1,4 +1,4 @@
-package io.github.clayclaw.opensky.config
+package io.github.clayclaw.opensky.config.comp
 
 data class ConfigCache(
     var endpoint: String = "localhost:6379",

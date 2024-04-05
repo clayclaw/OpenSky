@@ -2,7 +2,7 @@ package io.github.clayclaw.opensky.system.database
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.github.clayclaw.opensky.config.ConfigDatabase
+import io.github.clayclaw.opensky.config.BaseConfig
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -11,21 +11,21 @@ import java.util.logging.Logger
 
 @Single
 class ExposedDatabaseService(
-    private val config: ConfigDatabase,
+    private val baseConfig: BaseConfig,
     private val logger: Logger,
 ): DatabaseService {
-
+    
     private lateinit var database: Database
 
     override fun connect() {
         runCatching {
             database = Database.connect({
                 val config = HikariConfig().apply {
-                    jdbcUrl = config.jdbcUrl
-                    driverClassName = config.driver
-                    username = config.username
-                    password = config.password
-                    config.properties.forEach { (key, value) -> addDataSourceProperty(key, value) }
+                    jdbcUrl = baseConfig.database.jdbcUrl
+                    driverClassName = baseConfig.database.driver
+                    username = baseConfig.database.username
+                    password = baseConfig.database.password
+                    baseConfig.database.properties.forEach { (key, value) -> addDataSourceProperty(key, value) }
                 }
                 val dataSource = HikariDataSource(config)
                 dataSource.connection
