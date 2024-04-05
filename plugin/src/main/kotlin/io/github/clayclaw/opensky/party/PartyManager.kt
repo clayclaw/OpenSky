@@ -27,7 +27,7 @@ class PartyManager(
         fun memberKey(key: UUID) = "$KEY_PREFIX:${key}:members"
     }
 
-    fun createParty(leader: UUID, name: String?): Party {
+    fun createParty(leader: UUID, name: String?): MutableParty {
         val party = PartyDataProviderManagedParty(
             UUID.randomUUID(),
             name,
@@ -40,7 +40,7 @@ class PartyManager(
         return party
     }
 
-    override suspend fun read(key: UUID): Party? {
+    override suspend fun read(key: UUID): MutableParty? {
         withContext(Dispatchers.IO) {
             val hashKey = hashKey(key)
 
@@ -148,7 +148,7 @@ class PartyManager(
         override var name: String?,
         defaultLeader: UUID,
         override val members: HashSet<UUID>,
-    ): Party {
+    ): MutableParty {
 
         override var leader: UUID = defaultLeader
             private set
@@ -186,6 +186,9 @@ class PartyManager(
             this.leader = leader
             plugin.launch(Dispatchers.IO) {
                 redisCacheService.client.hdel(hashKey(uuid), "leader")
+                TableParties.update({ TableParties.uuid eq uuid }) {
+                    it[leaderUUID] = leader
+                }
             }
         }
 

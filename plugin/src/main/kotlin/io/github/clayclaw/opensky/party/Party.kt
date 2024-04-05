@@ -1,6 +1,6 @@
 package io.github.clayclaw.opensky.party
 
-import java.util.UUID
+import java.util.*
 
 interface Party {
 
@@ -10,6 +10,10 @@ interface Party {
     val leader: UUID
     val members: Set<UUID>
 
+}
+
+interface MutableParty: Party {
+
     fun addMember(member: UUID)
     fun removeMember(member: UUID)
 
@@ -18,3 +22,10 @@ interface Party {
     fun disband()
 
 }
+
+class ImmutableParty(
+    override val uuid: UUID,
+    override var name: String?,
+    override val leader: UUID,
+    override val members: Set<UUID>
+): Party

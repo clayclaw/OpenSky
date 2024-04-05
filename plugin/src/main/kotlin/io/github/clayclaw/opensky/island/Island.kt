@@ -1,5 +1,6 @@
 package io.github.clayclaw.opensky.island
 
+import io.github.clayclaw.opensky.party.ImmutableParty
 import io.github.clayclaw.opensky.party.Party
 import org.bukkit.World
 import java.util.*
@@ -27,7 +28,7 @@ sealed class Island(
 
     class Remote(
         uuid: UUID,
-        party: Party,
+        party: ImmutableParty,
         name: String?,
         val worldData: RemoteIslandWorldData,
     ): Island(uuid, party, name)
