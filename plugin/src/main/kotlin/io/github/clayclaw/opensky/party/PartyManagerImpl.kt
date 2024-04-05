@@ -74,7 +74,7 @@ class PartyManagerImpl(
         return null
     }
 
-    override suspend fun upsert(value: Party) {
+    override suspend fun upsert(value: MutableParty) {
         upsert(value, redisOnly = false)
     }
 
