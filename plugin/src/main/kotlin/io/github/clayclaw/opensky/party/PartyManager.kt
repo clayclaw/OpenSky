@@ -1,11 +1,11 @@
-package io.github.clayclaw.opensky.data.provider
+package io.github.clayclaw.opensky.party
 
 import com.github.shynixn.mccoroutine.bukkit.launch
 import io.github.clayclaw.opensky.OpenSkyPlugin
 import io.github.clayclaw.opensky.data.exposed.EntityParty
 import io.github.clayclaw.opensky.data.exposed.TableParties
 import io.github.clayclaw.opensky.data.exposed.TablePartyMembers
-import io.github.clayclaw.opensky.party.Party
+import io.github.clayclaw.opensky.data.provider.DataProvider
 import io.github.clayclaw.opensky.system.cache.RedisCacheService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -23,8 +23,8 @@ class PartyManager(
 
     companion object {
         const val KEY_PREFIX = "opensky-party"
-        fun hashKey(key: UUID) = "${KEY_PREFIX}:${key}"
-        fun memberKey(key: UUID) = "${KEY_PREFIX}:${key}:members"
+        fun hashKey(key: UUID) = "$KEY_PREFIX:${key}"
+        fun memberKey(key: UUID) = "$KEY_PREFIX:${key}:members"
     }
 
     fun createParty(leader: UUID, name: String?): Party {
@@ -124,8 +124,8 @@ class PartyManager(
 
     override suspend fun delete(key: UUID) {
         withContext(Dispatchers.IO) {
-            redisCacheService.client.del("${KEY_PREFIX}:${key}")
-            redisCacheService.client.del("${KEY_PREFIX}:${key}:members")
+            redisCacheService.client.del("$KEY_PREFIX:${key}")
+            redisCacheService.client.del("$KEY_PREFIX:${key}:members")
             transaction {
                 TableParties.deleteWhere { uuid eq key }
                 TablePartyMembers.deleteWhere { party eq key }
