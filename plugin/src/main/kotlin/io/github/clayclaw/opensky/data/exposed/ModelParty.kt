@@ -7,6 +7,7 @@ import java.util.*
 object TableParties: BaseIdTable<UUID>("opensky_parties") {
     val uuid = uuid("uuid").autoGenerate()
     val leaderUUID = uuid("leaderUUID")
+    val name = varchar("name", 255)
 
     override val id: Column<EntityID<UUID>> = uuid.entityId()
     override val primaryKey by lazy { super.primaryKey ?: PrimaryKey(id) }
@@ -16,6 +17,7 @@ class EntityParty(id: EntityID<UUID>): BaseEntity<UUID>(id, TableParties) {
     companion object: BaseEntityClass<UUID, EntityParty>(TableParties)
 
     val uuid by TableParties.uuid
+    val name by TableParties.name
     val leaderUUID by TableParties.leaderUUID
     val members by EntityPartyMember via TablePartyMembers
 }
