@@ -5,7 +5,7 @@ import com.github.ajalt.clikt.core.subcommands
 import io.github.clayclaw.opensky.OpenSkyPlugin
 import io.github.clayclaw.opensky.command.sub.CommandReload
 import io.github.clayclaw.opensky.config.ConfigMessage
-import io.github.clayclaw.opensky.data.provider.PartyManager
+import io.github.clayclaw.opensky.party.PartyManager
 import io.github.clayclaw.opensky.system.config.Config
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
