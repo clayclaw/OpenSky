@@ -18,7 +18,7 @@ interface PubSubNetworkService {
     fun close()
 
     suspend fun <T: Any> publish(channel: PubSubChannel, message: T)
-    suspend fun <T: Any> subscribe(channel: PubSubChannel, decoderClass: KClass<T>, handler: (T) -> Unit): PubSubSubscription
+    fun <T: Any> subscribe(channel: PubSubChannel, decoderClass: KClass<T>, handler: suspend (T) -> Unit): PubSubSubscription
 
 }
 
@@ -31,7 +31,7 @@ suspend fun <T: Any> PubSubNetworkService.publish(message: T) {
     publish(message::class.getPubSubChannel(), message)
 }
 
-suspend inline fun <reified T: Any> PubSubNetworkService.subscribe(noinline handler: (T) -> Unit): PubSubSubscription {
+inline fun <reified T: Any> PubSubNetworkService.subscribe(noinline handler: suspend (T) -> Unit): PubSubSubscription {
     val channel = T::class.getPubSubChannel()
     return subscribe(channel, T::class, handler)
 }

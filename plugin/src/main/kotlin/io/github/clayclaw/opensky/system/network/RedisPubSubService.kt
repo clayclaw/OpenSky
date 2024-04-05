@@ -58,16 +58,18 @@ class RedisPubSubService(
         redisService.value.client.publish(channel.id, jsonString)
     }
 
-    override suspend fun <T : Any> subscribe(
+    override fun <T : Any> subscribe(
         channel: PubSubChannel,
         decoderClass: KClass<T>,
-        handler: (T) -> Unit
+        handler: suspend (T) -> Unit
     ): PubSubSubscription {
         val subscription = RedisPubSubSubscription(channel, decoderClass) { anyObj ->
-            handler.invoke(anyObj as T)
+            plugin.launch {
+                handler.invoke(anyObj as T)
+            }
         }
         if(!subscriptions.containsKey(channel)) {
-            withContext(Dispatchers.IO) {
+            plugin.launch(Dispatchers.IO) {
                 subscriberClient.subscribe(channel.id)
             }
         } else {
