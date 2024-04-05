@@ -1,6 +1,7 @@
 package io.github.clayclaw.opensky.island
 
 import io.github.clayclaw.opensky.party.ImmutableParty
+import io.github.clayclaw.opensky.party.MutableParty
 import io.github.clayclaw.opensky.party.Party
 import org.bukkit.World
 import java.util.*
@@ -15,13 +16,13 @@ sealed class Island(
 
     class Unloaded(
         uuid: UUID,
-        party: Party,
+        party: ImmutableParty,
         name: String?,
     ): Island(uuid, party, name)
 
     class Local(
         uuid: UUID,
-        party: Party,
+        party: MutableParty,
         name: String?,
         val world: World,
     ): Island(uuid, party, name)
