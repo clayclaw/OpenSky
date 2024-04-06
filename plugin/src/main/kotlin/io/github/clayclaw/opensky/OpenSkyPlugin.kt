@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import io.github.clayclaw.opensky.system.cache.CacheService
 import io.github.clayclaw.opensky.command.OpenSkyBukkitCommand
 import io.github.clayclaw.opensky.config.configModule
+import io.github.clayclaw.opensky.island.RemoteIslandManager
 import io.github.clayclaw.opensky.system.database.DatabaseService
 import io.github.clayclaw.opensky.system.network.PubSubNetworkService
 import org.bukkit.plugin.java.JavaPlugin
@@ -59,14 +60,17 @@ class OpenSkyModuleBootstrap: KoinComponent {
     private val exposedDatabaseService: DatabaseService by inject()
     private val cacheService: CacheService by inject()
     private val pubSubService: PubSubNetworkService by inject()
+    private val remoteIslandManager: RemoteIslandManager by inject()
 
     fun init() {
         exposedDatabaseService.connect()
         cacheService.connect()
         pubSubService.init()
+        remoteIslandManager.init()
     }
 
     fun close() {
+        remoteIslandManager.close()
         pubSubService.close()
         cacheService.disconnect()
         exposedDatabaseService.disconnect()
