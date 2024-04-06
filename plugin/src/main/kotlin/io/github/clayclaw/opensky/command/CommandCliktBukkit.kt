@@ -1,10 +1,11 @@
 package io.github.clayclaw.opensky.command
 
+import io.github.clayclaw.opensky.system.command.CliktBukkitCommandBase
 import org.bukkit.command.CommandSender
 
-class CommandOpenSky(
+class CommandCliktBukkit(
     override val sender: CommandSender,
-): OpenSkyCommandBase() {
+): CliktBukkitCommandBase() {
 
     override fun run() {
         sender.sendMessage("Hello, OpenSky!")

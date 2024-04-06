@@ -1,11 +1,11 @@
 package io.github.clayclaw.opensky.command.sub
 
-import io.github.clayclaw.opensky.command.OpenSkyCommandBase
+import io.github.clayclaw.opensky.system.command.CliktBukkitCommandBase
 import org.bukkit.command.CommandSender
 
 class CommandParty(
     override val sender: CommandSender,
-): OpenSkyCommandBase(
+): CliktBukkitCommandBase(
     commandName = "party",
 ) {
 

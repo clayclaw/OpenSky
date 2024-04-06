@@ -4,4 +4,5 @@ import org.bukkit.command.CommandSender
 
 class CommandSenderNoPermissionException(
     val sender: CommandSender,
-): CommandException("Command sender ${sender.name} has no permission")
+    val permission: String,
+): CommandException("Command sender ${sender.name} has no permission $permission")
