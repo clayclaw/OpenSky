@@ -60,6 +60,11 @@ interface IslandService {
     suspend fun loadIsland(islandUUID: UUID): Island.Local
 
     /**
+     * Unload the island from the local server.
+     */
+    suspend fun unloadIsland(island: Island.Local): Island.Unloaded
+
+    /**
      * Delete the island from the data source.
      */
     suspend fun deleteIsland(islandUUID: UUID)

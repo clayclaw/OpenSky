@@ -6,6 +6,7 @@ import io.github.clayclaw.opensky.config.ConfigMessage
 import io.github.clayclaw.opensky.data.exposed.EntityIsland
 import io.github.clayclaw.opensky.data.exposed.EntityParty
 import io.github.clayclaw.opensky.data.exposed.toUnloadedIsland
+import io.github.clayclaw.opensky.event.IslandCreatedEvent
 import io.github.clayclaw.opensky.event.IslandDeletedEvent
 import io.github.clayclaw.opensky.event.IslandLoadedEvent
 import io.github.clayclaw.opensky.extension.callEvent
@@ -83,31 +84,42 @@ class IslandServiceImpl(
         return remoteIslandManager.getAllRemoteIslands() + localIslands.values
     }
 
-    override suspend fun createNewIsland(creator: Party): Island.Local {
+    override suspend fun createNewIsland(party: Party): Island.Local {
         val islandUUID = UUID.randomUUID()
-        withContext(Dispatchers.IO) {
-            val entityParty = EntityParty.findById(creator.uuid) ?: throw IllegalStateException("Party not found")
+        val entityIsland = withContext(Dispatchers.IO) {
+            val entityParty = EntityParty.findById(party.uuid) ?: throw IllegalStateException("Party not found")
             EntityIsland.new(islandUUID) {
-                party = entityParty
+                this.party = entityParty
                 name = configMessage.defaultIslandName
             }
         }
-        return loadIsland(islandUUID)
+
+        val unloadedIsland = entityIsland.toUnloadedIsland()
+        callEvent(IslandCreatedEvent(unloadedIsland))
+        return loadIsland(unloadedIsland)
     }
 
     override suspend fun loadIsland(islandUUID: UUID): Island.Local {
-        requireIslandNotLoaded(islandUUID)
-
         val unloadedIsland = withContext(Dispatchers.IO) {
             EntityIsland.findById(islandUUID)?.toUnloadedIsland() ?: throw IllegalStateException("Island not found")
         }
-        val loadedIsland = islandLoader.loadIsland(unloadedIsland)
-        localIslands[islandUUID] = loadedIsland
+        return loadIsland(unloadedIsland)
+    }
+
+    private suspend fun loadIsland(island: Island.Unloaded): Island.Local {
+        requireIslandNotLoaded(island.uuid)
+
+        val loadedIsland = islandLoader.loadIsland(island)
+        localIslands[island.uuid] = loadedIsland
         localIslandBukkitWorldMapping[loadedIsland.world.uid] = loadedIsland
 
         callEvent(IslandLoadedEvent(loadedIsland))
-
         return loadedIsland
+    }
+
+    override suspend fun unloadIsland(island: Island.Local): Island.Unloaded {
+        if(!isIslandLoadedLocally(island.uuid)) throw IllegalStateException("Island not loaded")
+        return islandLoader.unloadIsland(island)
     }
 
     override suspend fun deleteIsland(islandUUID: UUID) {
