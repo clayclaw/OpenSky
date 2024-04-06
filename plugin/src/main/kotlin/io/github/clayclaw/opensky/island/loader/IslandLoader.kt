@@ -3,7 +3,7 @@ package io.github.clayclaw.opensky.island.loader
 import io.github.clayclaw.opensky.island.Island
 import java.io.File
 
-interface IslandLoader {
+sealed interface IslandLoader {
 
     /**
      * Import a world as a template for island first time creation.

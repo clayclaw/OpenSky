@@ -3,6 +3,7 @@ package io.github.clayclaw.opensky.island.loader
 import com.infernalsuite.aswm.api.SlimePlugin
 import com.infernalsuite.aswm.api.loaders.SlimeLoader
 import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap
+import io.github.clayclaw.opensky.OpenSkyPlugin
 import io.github.clayclaw.opensky.island.Island
 import io.github.clayclaw.opensky.party.ImmutableParty
 import io.github.clayclaw.opensky.party.PartyManager
@@ -16,10 +17,16 @@ import java.lang.IllegalStateException
  * Island Loader using Advanced Slime World Manager (ASWM)
  */
 class ASWMIslandLoader(
-    private val aswm: SlimePlugin,
-    private val aswmLoader: SlimeLoader = aswm.getLoader("mysql"),
+    private val plugin: OpenSkyPlugin,
     private val partyManager: PartyManager,
 ): IslandLoader {
+
+    private val aswm: SlimePlugin by lazy {
+        plugin.server.pluginManager.getPlugin("SlimeWorldManager") as SlimePlugin
+    }
+    private val aswmLoader: SlimeLoader by lazy {
+        aswm.getLoader("mysql")
+    }
 
     override suspend fun importWorldTemplate(worldFolder: File) {
         withContext(Dispatchers.IO) {

@@ -1,5 +1,6 @@
 package io.github.clayclaw.opensky.data.exposed
 
+import io.github.clayclaw.opensky.party.ImmutableParty
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Column
 import java.util.*
@@ -35,4 +36,13 @@ class EntityPartyMember(id: EntityID<Int>): BaseEntity<Int>(id, TablePartyMember
 
     val playerUUID by TablePartyMembers.playerUUID
     val party by EntityParty referencedOn TablePartyMembers.party
+}
+
+fun EntityParty.toImmutable(): ImmutableParty {
+    return ImmutableParty(
+        uuid = uuid,
+        name = name,
+        leader = leaderUUID,
+        members = members.map { it.playerUUID }.toSet()
+    )
 }

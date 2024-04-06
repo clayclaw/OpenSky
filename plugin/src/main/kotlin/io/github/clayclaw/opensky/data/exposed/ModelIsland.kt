@@ -1,5 +1,6 @@
 package io.github.clayclaw.opensky.data.exposed
 
+import io.github.clayclaw.opensky.island.Island
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Column
 import java.util.*
@@ -16,7 +17,11 @@ object TableIslands: BaseIdTable<UUID>("opensky_islands") {
 class EntityIsland(id: EntityID<UUID>): BaseEntity<UUID>(id, TableIslands) {
     companion object: BaseEntityClass<UUID, EntityIsland>(TableIslands)
 
-    val uuid by TableIslands.uuid
-    val name by TableIslands.name
+    var uuid by TableIslands.uuid
+    var name by TableIslands.name
     var party by EntityParty referencedOn TableIslands.party
+}
+
+fun EntityIsland.toUnloadedIsland(): Island.Unloaded {
+    return Island.Unloaded(uuid, party.toImmutable(), name)
 }

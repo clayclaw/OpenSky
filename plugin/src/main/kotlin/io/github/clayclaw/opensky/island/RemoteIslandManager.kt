@@ -23,7 +23,7 @@ import java.util.UUID
 import java.util.logging.Logger
 
 @Single
-internal class RemoteIslandManager(
+class RemoteIslandManager(
     private val plugin: OpenSkyPlugin,
     private val networkService: PubSubNetworkService,
     private val baseConfig: BaseConfig,
@@ -31,17 +31,20 @@ internal class RemoteIslandManager(
 ): Listener {
 
     private val cancellableJobs = LinkedList<Job>()
-    private val islandMap = HashMap<String, RemoteServer>()
+    private val serverMap = HashMap<String, RemoteServer>()
+    private val islandMap = HashMap<UUID, Island.Remote>()
 
     internal fun init() {
         // If a remote server sends a message that an island is created, update the island data
         networkService.subscribe<MessageRemoteIslandCreated> {
-            getRemoteServer(it.serverId).islands[it.islandUUID] = it.islandState
+            getRemoteServer(it.serverId).islandUUIDs.add(it.islandUUID)
+            islandMap[it.islandUUID] = it.islandState
         }
 
         // If a remote server sends a message that an island is unloaded, remove the island data
         networkService.subscribe<MessageRemoteIslandUnloaded> {
-            getRemoteServer(it.serverId).islands.remove(it.islandUUID)
+            getRemoteServer(it.serverId).islandUUIDs.remove(it.islandUUID)
+            islandMap.remove(it.islandUUID)
         }
 
         // If a remote server sends a keepalive message, update the last alive timestamp
@@ -51,7 +54,7 @@ internal class RemoteIslandManager(
 
         // If a remote server goes down, remove all islands associated with it
         networkService.subscribe<MessageServerShutdown> {
-            islandMap.remove(it.serverId)
+            serverMap.remove(it.serverId)
         }
 
         // Periodically send keepalive messages to all remote servers
@@ -67,13 +70,14 @@ internal class RemoteIslandManager(
             while(isActive) {
                 delay(baseConfig.system.serverKeepaliveTimeMillis / 2)
                 val now = System.currentTimeMillis()
-                islandMap.values
+                serverMap.values
                     .filter { now - it.lastAliveTimestamp > baseConfig.system.serverKeepaliveTimeMillis }
                     .map { it.serverId }
                     .toList()
-                    .forEach {
-                        islandMap.remove(it)
-                        logger.warning("Server $it is probably down, removing all remote island data associated with it")
+                    .forEach { serverId ->
+                        serverMap[serverId]?.islandUUIDs?.forEach { islandMap.remove(it) }
+                        serverMap.remove(serverId)
+                        logger.warning("Server $serverId is probably down, removing all remote island data associated with it")
                     }
             }
         }.also { cancellableJobs.add(it) }
@@ -89,13 +93,25 @@ internal class RemoteIslandManager(
     }
 
     private fun getRemoteServer(serverId: String): RemoteServer {
-        return islandMap.getOrPut(serverId) { RemoteServer(serverId, System.currentTimeMillis()) }
+        return serverMap.getOrPut(serverId) { RemoteServer(serverId, System.currentTimeMillis()) }
+    }
+
+    fun getAllRemoteIslands(): List<Island.Remote> {
+        return islandMap.values.toList()
+    }
+
+    fun isRemoteIslandExists(islandUUID: UUID): Boolean {
+        return islandMap.containsKey(islandUUID)
+    }
+
+    fun getRemoteIsland(islandUUID: UUID): Island.Remote? {
+        return islandMap[islandUUID]
     }
 
     data class RemoteServer(
         val serverId: String,
         var lastAliveTimestamp: Long,
-        val islands: HashMap<UUID, Island.Remote> = HashMap(),
+        val islandUUIDs: HashSet<UUID> = HashSet()
     )
 
 }
