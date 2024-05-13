@@ -26,6 +26,13 @@ repositories {
     maven {
         url = uri("https://repo.rapture.pw/repository/maven-releases/")
     }
+    maven {
+        url = uri("https://jitpack.io")
+    }
+    maven {
+        name = "PlaceholderAPI Repository"
+        url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    }
 }
 
 val kotlinVersion: String by project
@@ -64,6 +71,11 @@ val runtimeDependencies = listOf(
     "com.github.ajalt.clikt:clikt-jvm:$cliktVersion",
 )
 
+val pluginDependencies = listOf(
+    "com.github.MilkBowl:VaultAPI:1.7",
+    "me.clip:placeholderapi:2.11.5",
+)
+
 spigot {
     authors("ClayClaw")
     commands {
@@ -72,7 +84,7 @@ spigot {
         }
     }
     libraries = runtimeDependencies + mavenDependencies
-    depends("SlimeWorldManager")
+    depends("SlimeWorldManager", "Vault", "PlaceholderAPI")
 }
 
 dependencies {
@@ -80,8 +92,10 @@ dependencies {
     compileOnly("com.infernalsuite.aswm:api:1.20.4-R0.1-20240218.183756-10")
 
     mavenDependencies.forEach(::compileOnly)
+    pluginDependencies.forEach(::compileOnly)
 
     ksp("io.insert-koin:koin-ksp-compiler:$koinAnnotationVersion")
+    implementation(kotlin("stdlib"))
 }
 
 sourceSets.main {
